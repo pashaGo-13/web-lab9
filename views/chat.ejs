@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Чат лаборатории</title>
+    <link rel="stylesheet" href="/style.css"> 
+</head>
+<body>
+    <button onclick="window.location.href='/'">Главная</button>
+    
+    <h2><%= typeof title !== 'undefined' ? title : "Чат участников" %></h2>
+    
+    <div id="user-info">Вы: <b id="display-name">...</b></div>
+    <div id="users-list">В сети: </div>
+
+    <div id="chat-window"></div>
+    
+    <input id="msgInput" type="text" placeholder="Сообщение...">
+    <button id="sendBtn">Отправить</button>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const name = prompt("Введите ваше имя для чата:") || "Аноним";
+        document.getElementById("display-name").innerText = name;
+
+        socket.emit("register", name);
+
+        socket.on("clientsList", (clients) => {
+            const names = Object.values(clients).map(c => c.name).join(", ");
+            document.getElementById("users-list").innerText = "В сети: " + names;
+        });
+
+        const send = () => {
+            const val = document.getElementById("msgInput").value;
+            if(val) {
+                socket.emit("message", val);
+                document.getElementById("msgInput").value = "";
+            }
+        };
+
+        document.getElementById("sendBtn").onclick = send;
+        document.getElementById("msgInput").onkeypress = (e) => { if (e.key === 'Enter') send(); };
+
+        socket.on("chatMessage", ({ from, text }) => {
+            const win = document.getElementById("chat-window");
+            const msgDiv = document.createElement("div");
+            msgDiv.className = "msg-item";
+            msgDiv.innerHTML = `<b>${from}:</b> ${text}`;
+            win.appendChild(msgDiv);
+            win.scrollTop = win.scrollHeight;
+        });
+    </script>
+</body>
+</html>
