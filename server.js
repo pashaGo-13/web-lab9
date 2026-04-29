@@ -2,12 +2,9 @@ import { app } from './rest.js';
 import { initSocket } from './socket.js';
 import http from 'node:http';
 
-const port = 3000;
-
-// Создаем HTTP сервер на базе Express приложения
+const port = process.env.PORT || 3000;
 const server = http.createServer(app);
 
-// Инициализируем сокеты
 initSocket(server);
 
 server.listen(port, () => {
