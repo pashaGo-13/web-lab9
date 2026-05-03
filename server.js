@@ -9,5 +9,5 @@ initSocket(server);
 
 server.listen(port, () => {
     console.log(`Running at http://localhost:${port}`);
-    console.log(`Chat available at http://localhost:${port}/chat`);
+    console.log(`Chat at http://localhost:${port}/chat`);
 });
