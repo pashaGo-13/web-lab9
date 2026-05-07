@@ -7,12 +7,20 @@
 <body>
     <button onclick="window.location.href='/'">Главная</button>
     
-    <h2><%= typeof title !== 'undefined' ? title : "Чат участников" %></h2>
+    <h2>Чат участников</h2>
     
     <div>Вы: <b id="display-name">...</b></div>
     <div id="users-list">В сети: </div>
 
-    <div id="chat-window"></div>
+    <div id="chat-window">
+        <% if (typeof messages !== 'undefined' && messages.length > 0) { %>
+            <% messages.forEach(msg => { %>
+                <div class="msg-item">
+                    <b><%= msg.from %>:</b> <%= msg.text %>
+                </div>
+            <% }); %>
+        <% } %>
+    </div>
     
     <input id="msgInput" type="text" placeholder="Сообщение...">
     <button id="sendBtn">Отправить</button>
@@ -20,7 +28,8 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
-        const name = prompt("Введите ваше имя для чата:") || "Аноним";
+        
+        const name = '<%= typeof userName !== "undefined" ? userName : "" %>' || prompt("Введите ваше имя для чата:") || "Аноним";
         document.getElementById("display-name").innerText = name;
 
         socket.emit("register", name);

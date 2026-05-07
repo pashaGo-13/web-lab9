@@ -7,6 +7,8 @@ import * as store from './store.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+let messageHistory = [];
+
 const app = express();
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
@@ -49,7 +51,11 @@ app.delete('/items/:id', async (req, res) => {
 });
 
 app.get('/chat', (req, res) => {
-    res.render('chat');
+    res.render('chat', {
+        title: "Чат",           
+        userName: req.query.name,     
+        messages: messageHistory      
+    });
 });
 
 export { app };
