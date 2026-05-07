@@ -53,7 +53,6 @@ app.delete('/items/:id', async (req, res) => {
 app.get('/chat', (req, res) => {
     res.render('chat', {
         title: "Чат",           
-        userName: req.query.name,     
         messages: messageHistory      
     });
 });

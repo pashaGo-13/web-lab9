@@ -29,7 +29,7 @@
     <script>
         const socket = io();
         
-        const name = '<%= typeof userName !== "undefined" ? userName : "" %>' || prompt("Введите ваше имя для чата:") || "Аноним";
+        const name = prompt("Введите ваше имя для чата:") || "Аноним";
         document.getElementById("display-name").innerText = name;
 
         socket.emit("register", name);
